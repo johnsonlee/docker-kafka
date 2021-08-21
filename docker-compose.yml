@@ -1,0 +1,10 @@
+version: "3.0"
+
+services:
+  kafka:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: johnsonlee/kafka:2.8.0
+    container_name: kafka
+
