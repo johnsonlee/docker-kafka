@@ -6,19 +6,20 @@ on:
       - '*'
 
 jobs:
-
   publish:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker-compose build
-    - name: Publish to Docker Hub
+    -
+      name: Checkout
+      uses: actions/checkout@v2
+    -
+      name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+    -
+      name: Build the Docker image and publish to Docker Hub
       run: |
         docker login --username ${DOCKERHUB_USERNAME} --password ${DOCKERHUB_PASSWORD}
-        docker-compose push
+        docker buildx build --platform linux/amd64,linux/arm64 -t johnsonlee/kafka:${GITHUB_REF/refs\/tags\//} --push .
       env:
         DOCKERHUB_USERNAME: ${{secrets.DOCKERHUB_USERNAME}}
         DOCKERHUB_PASSWORD: ${{secrets.DOCKERHUB_PASSWORD}}
