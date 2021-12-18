@@ -9,7 +9,7 @@ docker network create -d bridge kafka-cluster
 ## Launch ZooKeeper
 
 ```bash
-docker run -it -w=/opt/kafka-2.8.0 --network=kafka-cluster --name zk \
+docker run -it --rm -w=/opt/kafka-2.8.0 --network=kafka-cluster --name zk \
     -p 2181:2181 \
     johnsonlee/kafka:2.8.0 \
     bin/zookeeper-server-start.sh config/zookeeper.properties
@@ -18,7 +18,7 @@ docker run -it -w=/opt/kafka-2.8.0 --network=kafka-cluster --name zk \
 ## Launch Kafka
 
 ```bash
-docker run -it -w=/opt/kafka-2.8.0 --network=kafka-cluster --name kafka \
+docker run -it --rm -w=/opt/kafka-2.8.0 --network=kafka-cluster --name kafka \
     -p 9092:9092 \
     -v "$(pwd)"/config:/opt/kafka-2.8.0/config \
     johnsonlee/kafka:2.8.0 \
@@ -28,7 +28,7 @@ docker run -it -w=/opt/kafka-2.8.0 --network=kafka-cluster --name kafka \
 ## Create Topic
 
 ```bash
-docker run -it -w=/opt/kafka-2.8.0 --network=kafka-cluster \
+docker run -it --rm -w=/opt/kafka-2.8.0 --network=kafka-cluster \
     johnsonlee/kafka:2.8.0 \
     bin/kafka-topics.sh \
     --create \
@@ -41,7 +41,7 @@ docker run -it -w=/opt/kafka-2.8.0 --network=kafka-cluster \
 Launching an interactive console producer by executing the following command:
 
 ```bash
-docker run -it -w=/opt/kafka-2.8.0 --network=kafka-cluster \
+docker run -it --rm -w=/opt/kafka-2.8.0 --network=kafka-cluster \
     johnsonlee/kafka:2.8.0 \
     bin/kafka-console-producer.sh \
     --topic quickstart-events \
@@ -55,7 +55,7 @@ After the command promote `>` show in the console, then you can write events (on
 Launching a console consumer by executing the following command:
 
 ```bash
-docker run -it -w=/opt/kafka-2.8.0 --network=kafka-cluster \
+docker run -it --rm -w=/opt/kafka-2.8.0 --network=kafka-cluster \
     johnsonlee/kafka:2.8.0 \
     bin/kafka-console-consumer.sh \
     --topic quickstart-events \
@@ -70,7 +70,7 @@ After you write event through the interactive console producer, the event can be
 ### Create Topic for K6
 
 ```bash
-docker run -it -w=/opt/kafka-2.8.0 --network=kafka-cluster \
+docker run -it --rm -w=/opt/kafka-2.8.0 --network=kafka-cluster \
     johnsonlee/kafka:2.8.0 \
     bin/kafka-topics.sh \
     --create \
@@ -81,7 +81,7 @@ docker run -it -w=/opt/kafka-2.8.0 --network=kafka-cluster \
 ### Run K6
 
 ```bash
-docker run -i --network=kafka-cluster loadimpact/k6 run \
+docker run -it --rm --network=kafka-cluster loadimpact/k6 run \
     --logformat=raw \
     --out kafka=brokers=kafka:9092,topic=k6,format=json \
     - <scenario.js
